@@ -266,7 +266,7 @@
                                     <div class="card mb-4">
                                         <h5 class="card-header">Comments </h5>
 
-                                        <div class="card-body">
+                                        <!-- <div class="card-body">
 
 
                                         <div class="">
@@ -335,8 +335,10 @@
                                                     </div>
                                                         </div>
                                                       </div>
-                                                  </div>
-
+                                                  </div> -->
+                                        <div class="card-body">
+                                            @include('user.comment_section')
+                                        </div>
                                                             </div>
                                                         </div>
                                                     </div>

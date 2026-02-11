@@ -179,6 +179,29 @@ Route::post('/user/organization', function () {
     }
 });
 
+Route::post('/user/issue/{id}/comment', function ($id) {
+    $user_id = \Illuminate\Support\Facades\Auth::user()->id;
+    $content = $_POST['content'];
+    
+    // Get the issue to find the desc_comment_id (parent comment)
+    $issue_response = \Illuminate\Support\Facades\Http::get('http://localhost:8001/api/issue/' . $id);
+    $issue = $issue_response['data'];
+    
+    // Use provided parent_id if replying to a specific comment, otherwise use issue's main comment
+    $parent_id = $_POST['parent_id'] ?? $issue['desc_comment']['id'];
+    
+    // Create comment via API
+    $response = \Illuminate\Support\Facades\Http::post('http://localhost:8001/api/comment/', [
+        'user_id' => $user_id,
+        'contentt' => $content,  // Note: API uses 'contentt' not 'content'
+        'upvote' => 0,
+        'downvote' => 0,
+        'parent_id' => $parent_id,
+    ]);
+    
+    return redirect('/user/issueinfo?id=' . $id);
+});
+
 Route::post('login', 'App\Http\Controllers\LoginController@login')->name('login');
 
 Route::get('logout', 'App\Http\Controllers\LoginController@logout')->name('logout');
